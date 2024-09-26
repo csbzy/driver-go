@@ -135,6 +135,9 @@ func (tc *taosConn) ping() {
 
 func (tc *taosConn) read() {
 	for {
+		if tc.client == nil || tc.isClosed() {
+			break
+		}
 		mt, msg, err := tc.client.ReadMessage()
 		tc.messageChan <- &message{
 			mt:      mt,
