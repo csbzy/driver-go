@@ -1,6 +1,7 @@
 package taosWS
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -59,7 +60,7 @@ func TestBadConnection(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parseDSN error: %v", err)
 	}
-	conn, err := newTaosConn(cfg)
+	conn, err := newTaosConn(context.Background(), cfg)
 	if err != nil {
 		t.Fatalf("newTaosConn error: %v", err)
 	}
