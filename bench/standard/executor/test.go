@@ -405,7 +405,6 @@ func (t *TDTest) PrepareRead(count, batch int) (tableName string) {
 		float64(cost.Nanoseconds())/float64(batch))
 	return "read_json"
 }
-
 func (t *TDTest) BenchmarkRead(sqlStr string) {
 	db, err := sql.Open(t.DriverName, t.DSN+"benchmark_go")
 	if err != nil {

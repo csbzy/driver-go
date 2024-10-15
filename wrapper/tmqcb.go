@@ -7,14 +7,13 @@ package wrapper
 #include <taos.h>
 */
 import "C"
-
 import (
 	"unsafe"
 
 	"github.com/taosdata/driver-go/v3/wrapper/cgo"
 )
 
-// typedef void(tmq_commit_cb(tmq_t *, int32_t code, void *param));
+//typedef void(tmq_commit_cb(tmq_t *, int32_t code, void *param));
 
 //export TMQCommitCB
 func TMQCommitCB(consumer unsafe.Pointer, resp C.int32_t, param unsafe.Pointer) {

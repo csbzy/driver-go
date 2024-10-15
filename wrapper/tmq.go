@@ -10,7 +10,6 @@ extern void TMQAutoCommitCB(tmq_t *, int32_t,  void *param);
 extern void TMQCommitOffsetCB(tmq_t *, int32_t,  void *param);
 */
 import "C"
-
 import (
 	"sync"
 	"unsafe"

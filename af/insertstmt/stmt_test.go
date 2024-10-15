@@ -26,7 +26,6 @@ func prepareEnv(conn unsafe.Pointer) error {
 	}
 	return nil
 }
-
 func cleanEnv(conn unsafe.Pointer) error {
 	sqls := []string{
 		"drop database if exists insert_stmt",
@@ -38,7 +37,6 @@ func cleanEnv(conn unsafe.Pointer) error {
 	}
 	return nil
 }
-
 func TestStmt(t *testing.T) {
 	conn, err := wrapper.TaosConnect("", "root", "taosdata", "", 0)
 	assert.NoError(t, err)
@@ -99,6 +97,7 @@ func TestStmt(t *testing.T) {
 	assert.NoError(t, err)
 	affected = s.GetAffectedRows()
 	assert.Equal(t, int(1), affected)
+
 }
 
 func exec(conn unsafe.Pointer, sql string) error {

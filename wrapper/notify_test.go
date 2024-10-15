@@ -94,4 +94,5 @@ func TestNotify(t *testing.T) {
 	case <-timeoutDropUser.Done():
 		t.Error("wait for notifyDropUser callback timeoutDropUser")
 	}
+
 }

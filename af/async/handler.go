@@ -8,10 +8,8 @@ import (
 
 const defaultPoolSize = 10000
 
-var (
-	HandlerPool *handler.HandlerPool
-	once        = sync.Once{}
-)
+var HandlerPool *handler.HandlerPool
+var once = sync.Once{}
 
 func SetHandlerSize(size int) {
 	once.Do(func() {

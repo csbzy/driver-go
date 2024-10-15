@@ -70,5 +70,5 @@ func main() {
 		counter += 1
 	}
 	fmt.Println(counter)
-	// assert.Equal(t, 3, counter)
+	//assert.Equal(t, 3, counter)
 }

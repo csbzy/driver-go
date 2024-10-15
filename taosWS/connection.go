@@ -480,7 +480,6 @@ func (tc *taosConn) stmtUseResult(stmtID uint64) (*rows, error) {
 	}
 	return rs, nil
 }
-
 func (tc *taosConn) Exec(query string, args []driver.Value) (driver.Result, error) {
 	return tc.execCtx(context.Background(), query, common.ValueArgsToNamedValueArgs(args))
 }

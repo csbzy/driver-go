@@ -42,7 +42,9 @@ type Connector struct {
 	db                  string
 }
 
-var ConnectTimeoutErr = errors.New("stmt connect timeout")
+var (
+	ConnectTimeoutErr = errors.New("stmt connect timeout")
+)
 
 func NewConnector(config *Config) (*Connector, error) {
 	var connector *Connector
@@ -211,12 +213,10 @@ func (c *Connector) sendText(reqID uint64, envelope *client.Envelope) ([]byte, e
 	envelope.Type = websocket.TextMessage
 	return c.send(reqID, envelope)
 }
-
 func (c *Connector) sendBinary(reqID uint64, envelope *client.Envelope) ([]byte, error) {
 	envelope.Type = websocket.BinaryMessage
 	return c.send(reqID, envelope)
 }
-
 func (c *Connector) send(reqID uint64, envelope *client.Envelope) ([]byte, error) {
 	channel := &IndexedChan{
 		index:   reqID,
@@ -290,7 +290,7 @@ func (c *Connector) handleError(err error) {
 	if c.customErrorHandler != nil {
 		c.customErrorHandler(c, err)
 	}
-	// c.Close()
+	//c.Close()
 }
 
 func (c *Connector) generateReqID() uint64 {

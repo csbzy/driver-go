@@ -136,6 +136,7 @@ func TestQuery(t *testing.T) {
 		t.Fatal(fNchar)
 	}
 	rows.Columns()
+
 }
 
 // @author: xftan
@@ -547,6 +548,7 @@ func TestFastInsertWithSetTableNameTag(t *testing.T) {
 			}
 		})
 	}
+
 }
 
 // @author: xftan
@@ -866,6 +868,7 @@ func TestConnector_InsertStmtWithReqID(t *testing.T) {
 	if stmt.GetAffectedRows() != 1 {
 		t.Fatal("result miss")
 	}
+
 }
 
 // @author: xftan
@@ -923,6 +926,57 @@ func TestConnector_QueryWithReqID(t *testing.T) {
 	if v[0].(int64) != 1 {
 		t.Fatal("result is error")
 	}
+}
+
+func TestInfluxDBInsertLinesWithReqID(t *testing.T) {
+	db := testDatabase(t)
+	defer db.Close()
+	err := db.InfluxDBInsertLinesWithReqID(raw, "ns", 0x1234, 0, "")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	err = db.InfluxDBInsertLinesWithReqID("wrong", "ns", 0x1234, 0, "")
+	assert.Errorf(t, err, "expect error")
+}
+
+func TestOpenTSDBInsertTelnetLinesWithReqID(t *testing.T) {
+	db := testDatabase(t)
+	defer db.Close()
+	err := db.OpenTSDBInsertTelnetLinesWithReqID(
+		"sys_if_bytes_out 1479496100 1.3E3 host=web01 interface=eth0\nsys_procs_running 1479496100 42 host=web01",
+		0x2234, 0, "")
+
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	err = db.OpenTSDBInsertTelnetLinesWithReqID(
+		"wrong",
+		0x2234, 0, "")
+	assert.Errorf(t, err, "expect error")
+}
+
+func TestOpenTSDBInsertJsonPayloadWithReqID(t *testing.T) {
+	db := testDatabase(t)
+	defer db.Close()
+	err := db.OpenTSDBInsertJsonPayloadWithReqID(`{
+    "metric": "sys",
+    "timestamp": 
+    "value": 18,
+    "tags": {
+       "host": "web01",
+       "dc": "lga"
+    }
+}`, 0x3234, 0, "")
+	if err == nil {
+		t.Error("expect error")
+		return
+	}
+	err = db.OpenTSDBInsertJsonPayloadWithReqID(
+		"wrong",
+		0x3234, 0, "")
+	assert.Errorf(t, err, "expect error")
 }
 
 func TestNewConnector(t *testing.T) {

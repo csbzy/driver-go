@@ -87,7 +87,7 @@ func TestTaosQueryA(t *testing.T) {
 		return
 	}
 	defer TaosClose(conn)
-	caller := NewTestCaller()
+	var caller = NewTestCaller()
 	type args struct {
 		taosConnect unsafe.Pointer
 		sql         string
@@ -368,7 +368,7 @@ func TestTaosResultBlock(t *testing.T) {
 		return
 	}
 	defer TaosClose(conn)
-	caller := NewTestCaller()
+	var caller = NewTestCaller()
 	type args struct {
 		taosConnect unsafe.Pointer
 		sql         string
@@ -399,7 +399,7 @@ func TestTaosResultBlock(t *testing.T) {
 				t.Error(err)
 				return
 			}
-			// t.Logf("%#v", rowsHeader)
+			//t.Logf("%#v", rowsHeader)
 			if r.n != 0 {
 				t.Error("query result", r.n)
 				return
@@ -472,6 +472,7 @@ func TestTaosLoadTableInfo(t *testing.T) {
 		t.Error(errors.NewError(code, errStr))
 		return
 	}
+
 }
 
 // @author: xftan
@@ -557,7 +558,7 @@ func TestTaosGetTablesVgID(t *testing.T) {
 	var code int
 	now := time.Now()
 	vgs1, code = TaosGetTablesVgID(conn, dbName, []string{"d0", "d1"})
-	fmt.Println(time.Since(now))
+	t.Log(time.Since(now))
 	if code != 0 {
 		t.Fatal("fail")
 	}

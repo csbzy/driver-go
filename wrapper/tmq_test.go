@@ -96,7 +96,7 @@ func TestTMQ(t *testing.T) {
 	}
 	TaosFreeResult(result)
 
-	// create topic
+	//create topic
 	defer func() {
 		result = TaosQuery(conn, "drop topic if exists topic_ctb_column")
 		code = TaosError(result)
@@ -142,7 +142,7 @@ func TestTMQ(t *testing.T) {
 			time.Sleep(time.Millisecond)
 		}
 	}()
-	// build consumer
+	//build consumer
 	conf := TMQConfNew()
 	TMQConfSet(conf, "msg.with.table.name", "true")
 	// auto commit default is true then the commitCallback function will be called after 5 seconds
@@ -163,11 +163,11 @@ func TestTMQ(t *testing.T) {
 		t.Error(err)
 	}
 	TMQConfDestroy(conf)
-	// build_topic_list
+	//build_topic_list
 	topicList := TMQListNew()
 	TMQListAppend(topicList, "topic_ctb_column")
 
-	// sync_consume_loop
+	//sync_consume_loop
 	s := time.Now()
 	errCode := TMQSubscribe(tmq, topicList)
 	if errCode != 0 {
@@ -216,8 +216,8 @@ func TestTMQ(t *testing.T) {
 					return
 				}
 				precision := TaosResultPrecision(message)
-				// tableName := TMQGetTableName(message)
-				// assert.Equal(t, "ct1", tableName)
+				//tableName := TMQGetTableName(message)
+				//assert.Equal(t, "ct1", tableName)
 				dbName := TMQGetDBName(message)
 				assert.Equal(t, "abc1", dbName)
 				data := parser.ReadBlock(block, blockSize, rh.ColTypes, precision)
@@ -343,7 +343,7 @@ func TestTMQDB(t *testing.T) {
 	}
 	TaosFreeResult(result)
 
-	// create topic
+	//create topic
 	result = TaosQuery(conn, "create topic if not exists test_tmq_db_topic as DATABASE tmq_test_db")
 	code = TaosError(result)
 	if code != 0 {
@@ -378,7 +378,7 @@ func TestTMQDB(t *testing.T) {
 			time.Sleep(time.Millisecond)
 		}
 	}()
-	// build consumer
+	//build consumer
 	conf := TMQConfNew()
 	// auto commit default is true then the commitCallback function will be called after 5 seconds
 	TMQConfSet(conf, "enable.auto.commit", "true")
@@ -399,11 +399,11 @@ func TestTMQDB(t *testing.T) {
 		t.Error(err)
 	}
 	TMQConfDestroy(conf)
-	// build_topic_list
+	//build_topic_list
 	topicList := TMQListNew()
 	TMQListAppend(topicList, "test_tmq_db_topic")
 
-	// sync_consume_loop
+	//sync_consume_loop
 	errCode := TMQSubscribe(tmq, topicList)
 	if errCode != 0 {
 		errStr := TMQErr2Str(errCode)
@@ -552,7 +552,7 @@ func TestTMQDBMultiTable(t *testing.T) {
 	}
 	TaosFreeResult(result)
 
-	// create topic
+	//create topic
 	result = TaosQuery(conn, "create topic if not exists test_tmq_db_multi_topic as DATABASE tmq_test_db_multi")
 	code = TaosError(result)
 	if code != 0 {
@@ -606,7 +606,7 @@ func TestTMQDBMultiTable(t *testing.T) {
 		}
 		TaosFreeResult(result)
 	}
-	// build consumer
+	//build consumer
 	conf := TMQConfNew()
 	// auto commit default is true then the commitCallback function will be called after 5 seconds
 	TMQConfSet(conf, "enable.auto.commit", "true")
@@ -627,11 +627,11 @@ func TestTMQDBMultiTable(t *testing.T) {
 		t.Error(err)
 	}
 	TMQConfDestroy(conf)
-	// build_topic_list
+	//build_topic_list
 	topicList := TMQListNew()
 	TMQListAppend(topicList, "test_tmq_db_multi_topic")
 
-	// sync_consume_loop
+	//sync_consume_loop
 	errCode := TMQSubscribe(tmq, topicList)
 	if errCode != 0 {
 		errStr := TMQErr2Str(errCode)
@@ -790,7 +790,7 @@ func TestTMQDBMultiInsert(t *testing.T) {
 	}
 	TaosFreeResult(result)
 
-	// create topic
+	//create topic
 	result = TaosQuery(conn, "create topic if not exists tmq_test_db_multi_insert_topic as DATABASE tmq_test_db_multi_insert")
 	code = TaosError(result)
 	if code != 0 {
@@ -822,7 +822,7 @@ func TestTMQDBMultiInsert(t *testing.T) {
 		}
 		TaosFreeResult(result)
 	}
-	// build consumer
+	//build consumer
 	conf := TMQConfNew()
 	// auto commit default is true then the commitCallback function will be called after 5 seconds
 	TMQConfSet(conf, "enable.auto.commit", "true")
@@ -843,11 +843,11 @@ func TestTMQDBMultiInsert(t *testing.T) {
 		t.Error(err)
 	}
 	TMQConfDestroy(conf)
-	// build_topic_list
+	//build_topic_list
 	topicList := TMQListNew()
 	TMQListAppend(topicList, "tmq_test_db_multi_insert_topic")
 
-	// sync_consume_loop
+	//sync_consume_loop
 	errCode := TMQSubscribe(tmq, topicList)
 	if errCode != 0 {
 		errStr := TMQErr2Str(errCode)
@@ -1008,7 +1008,7 @@ func TestTMQModify(t *testing.T) {
 	}
 	TaosFreeResult(result)
 
-	// create topic
+	//create topic
 	result = TaosQuery(conn, "create topic if not exists tmq_test_db_modify_topic with meta as DATABASE tmq_test_db_modify")
 	code = TaosError(result)
 	if code != 0 {
@@ -1029,7 +1029,7 @@ func TestTMQModify(t *testing.T) {
 		}
 		TaosFreeResult(result)
 	}()
-	// build consumer
+	//build consumer
 	conf := TMQConfNew()
 	// auto commit default is true then the commitCallback function will be called after 5 seconds
 	TMQConfSet(conf, "enable.auto.commit", "true")
@@ -1050,11 +1050,11 @@ func TestTMQModify(t *testing.T) {
 		t.Error(err)
 	}
 	TMQConfDestroy(conf)
-	// build_topic_list
+	//build_topic_list
 	topicList := TMQListNew()
 	TMQListAppend(topicList, "tmq_test_db_modify_topic")
 
-	// sync_consume_loop
+	//sync_consume_loop
 	errCode := TMQSubscribe(tmq, topicList)
 	if errCode != 0 {
 		errStr := TMQErr2Str(errCode)
@@ -1267,7 +1267,7 @@ func TestTMQAutoCreateTable(t *testing.T) {
 	}
 	TaosFreeResult(result)
 
-	// create topic
+	//create topic
 	result = TaosQuery(conn, "create topic if not exists test_tmq_auto_topic with meta as DATABASE tmq_test_auto_create")
 	code = TaosError(result)
 	if code != 0 {
@@ -1297,7 +1297,7 @@ func TestTMQAutoCreateTable(t *testing.T) {
 		return
 	}
 	TaosFreeResult(result)
-	// build consumer
+	//build consumer
 	conf := TMQConfNew()
 	// auto commit default is true then the commitCallback function will be called after 5 seconds
 	TMQConfSet(conf, "enable.auto.commit", "true")
@@ -1318,11 +1318,11 @@ func TestTMQAutoCreateTable(t *testing.T) {
 		t.Error(err)
 	}
 	TMQConfDestroy(conf)
-	// build_topic_list
+	//build_topic_list
 	topicList := TMQListNew()
 	TMQListAppend(topicList, "test_tmq_auto_topic")
 
-	// sync_consume_loop
+	//sync_consume_loop
 	errCode := TMQSubscribe(tmq, topicList)
 	if errCode != 0 {
 		errStr := TMQErr2Str(errCode)
@@ -1510,7 +1510,7 @@ func TestTMQGetTopicAssignment(t *testing.T) {
 	end = assignment[0].End
 	assert.Equal(t, int32(vgID), assignment[0].VGroupID)
 
-	// seek
+	//seek
 	code = TMQOffsetSeek(tmq, "test_tmq_assignment", int32(vgID), 0)
 	if code != 0 {
 		t.Fatal(errors.NewError(int(code), TMQErr2Str(code)))

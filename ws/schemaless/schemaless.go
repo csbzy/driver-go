@@ -200,7 +200,9 @@ func (s *Schemaless) Close() {
 	})
 }
 
-var ConnectTimeoutErr = errors.New("schemaless connect timeout")
+var (
+	ConnectTimeoutErr = errors.New("schemaless connect timeout")
+)
 
 func connect(ws *websocket.Conn, user string, password string, db string, writeTimeout time.Duration, readTimeout time.Duration) error {
 	req := &wsConnectReq{

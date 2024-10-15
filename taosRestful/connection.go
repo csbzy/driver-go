@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
@@ -81,7 +82,7 @@ func newTaosConn(cfg *config) (*taosConn, error) {
 		"Connection": {"keep-alive"},
 	}
 	if cfg.token != "" {
-		tc.url.RawQuery = fmt.Sprintf("token=%s", cfg.token)
+		tc.baseRawQuery = fmt.Sprintf("token=%s", cfg.token)
 	} else {
 		basic := base64.StdEncoding.EncodeToString([]byte(cfg.user + ":" + cfg.passwd))
 		tc.header["Authorization"] = []string{fmt.Sprintf("Basic %s", basic)}
@@ -202,8 +203,20 @@ func (tc *taosConn) BeginTx(ctx context.Context, opts driver.TxOptions) (driver.
 	return nil, &taosErrors.TaosError{Code: 0xffff, ErrStr: "restful does not support transaction"}
 }
 
-func (tc *taosConn) taosQuery(ctx context.Context, sql string, bufferSize int) (r *common.TDEngineRestfulResp, err error) {
-	body := io.NopCloser(strings.NewReader(sql))
+func (tc *taosConn) taosQuery(ctx context.Context, sql string, bufferSize int) (*common.TDEngineRestfulResp, error) {
+	reqIDValue, err := common.GetReqIDFromCtx(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if reqIDValue == 0 {
+		reqIDValue = common.GetReqID()
+	}
+	if tc.baseRawQuery != "" {
+		tc.url.RawQuery = fmt.Sprintf("%s&req_id=%d", tc.baseRawQuery, reqIDValue)
+	} else {
+		tc.url.RawQuery = fmt.Sprintf("req_id=%d", reqIDValue)
+	}
+	body := ioutil.NopCloser(strings.NewReader(sql))
 	req := &http.Request{
 		Method:     http.MethodPost,
 		URL:        tc.url,
@@ -237,28 +250,28 @@ func (tc *taosConn) taosQuery(ctx context.Context, sql string, bufferSize int) (
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		body, err := io.ReadAll(resp.Body)
+		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			return nil, err
 		}
 		return nil, fmt.Errorf("server response: %s - %s", resp.Status, string(body))
 	}
 	respBody := resp.Body
-	defer io.ReadAll(respBody)
+	defer ioutil.ReadAll(respBody)
 	if !tc.cfg.disableCompression && EqualFold(resp.Header.Get("Content-Encoding"), "gzip") {
 		respBody, err = gzip.NewReader(resp.Body)
 		if err != nil {
 			return nil, err
 		}
 	}
-	r, err = marshalBody(respBody, bufferSize)
+	data, err := marshalBody(respBody, bufferSize)
 	if err != nil {
 		return nil, err
 	}
-	if r.Code != 0 {
-		return nil, taosErrors.NewError(r.Code, r.Desc)
+	if data.Code != 0 {
+		return nil, taosErrors.NewError(data.Code, data.Desc)
 	}
-	return r, nil
+	return data, nil
 }
 
 func marshalBody(body io.Reader, bufferSize int) (*common.TDEngineRestfulResp, error) {

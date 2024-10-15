@@ -4,7 +4,6 @@ package wrapper
 #include <taos.h>
 */
 import "C"
-
 import (
 	"bytes"
 	"reflect"

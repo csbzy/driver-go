@@ -238,7 +238,7 @@ func TestSeek(t *testing.T) {
 	}
 	assert.Equal(t, record, dataCount)
 
-	// assignment after poll
+	//assignment after poll
 	assignment, err = consumer.Assignment()
 	t.Log(assignment)
 	assert.NoError(t, err)
@@ -257,7 +257,7 @@ func TestSeek(t *testing.T) {
 		assert.NoError(t, err)
 	}
 
-	// assignment after seek
+	//assignment after seek
 	assignment, err = consumer.Assignment()
 	t.Log(assignment)
 	assert.NoError(t, err)
@@ -267,7 +267,7 @@ func TestSeek(t *testing.T) {
 		assert.Equal(t, topic, *assignment[i].Topic)
 	}
 
-	// poll after seek
+	//poll after seek
 	dataCount = 0
 	for i := 0; i < 20; i++ {
 		if dataCount >= record {
@@ -286,7 +286,7 @@ func TestSeek(t *testing.T) {
 	}
 	assert.Equal(t, record, dataCount)
 
-	// assignment after poll
+	//assignment after poll
 	assignment, err = consumer.Assignment()
 	t.Log(assignment)
 	assert.NoError(t, err)

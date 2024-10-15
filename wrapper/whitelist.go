@@ -15,7 +15,6 @@ void taos_fetch_whitelist_a_wrapper(TAOS *taos, void *param){
 };
 */
 import "C"
-
 import (
 	"unsafe"
 

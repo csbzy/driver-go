@@ -84,7 +84,7 @@ func parseDSN(dsn string) (cfg *config, err error) {
 							if strings.ContainsRune(dsn[k+1:i], ')') {
 								return nil, errInvalidDSNUnescaped
 							}
-							// return nil, errInvalidDSNAddr
+							//return nil, errInvalidDSNAddr
 						}
 						strList := strings.Split(dsn[k+1:i-1], ":")
 						if len(strList) == 1 {

@@ -7,10 +7,8 @@ import (
 	"github.com/taosdata/driver-go/v3/wrapper/thread"
 )
 
-var (
-	locker *thread.Locker
-	once   = sync.Once{}
-)
+var locker *thread.Locker
+var once = sync.Once{}
 
 func Lock() {
 	if locker == nil {
@@ -18,7 +16,6 @@ func Lock() {
 	}
 	locker.Lock()
 }
-
 func Unlock() {
 	if locker == nil {
 		SetMaxThreadSize(runtime.NumCPU())

@@ -74,7 +74,7 @@ type Client struct {
 	TextMessageHandler   func(message []byte)
 	BinaryMessageHandler func(message []byte)
 	ErrorHandler         func(err error)
-	// SendMessageHandler   func(envelope *Envelope)
+	//SendMessageHandler   func(envelope *Envelope)
 	once           sync.Once
 	errHandlerOnce sync.Once
 	err            error
