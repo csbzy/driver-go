@@ -16,13 +16,12 @@ import (
 	"strings"
 	"time"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/taosdata/driver-go/v3/common"
 	taosErrors "github.com/taosdata/driver-go/v3/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/syncx"
 	"github.com/zeromicro/go-zero/core/timex"
-
-	jsoniter "github.com/json-iterator/go"
 )
 
 var jsonI = jsoniter.ConfigCompatibleWithStandardLibrary
@@ -40,6 +39,7 @@ type taosConn struct {
 	cfg            *config
 	client         *http.Client
 	url            *url.URL
+	baseRawQuery   string
 	header         map[string][]string
 	readBufferSize int
 }

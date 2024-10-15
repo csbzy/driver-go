@@ -13,12 +13,14 @@ import (
 	"github.com/taosdata/driver-go/v3/common/pointer"
 )
 
-var tUUIDHashId int64
-var serialNo int64
-var pid int64
+var (
+	tUUIDHashId int64
+	serialNo    int64
+	pid         int64
+)
 
 func init() {
-	var tUUID = uuid.New().String()
+	tUUID := uuid.New().String()
 	tUUIDHashId = (int64(murmurHash32([]byte(tUUID), uint32(len(tUUID)))) & 0x07ff) << 52
 	pid = (int64(os.Getpid()) & 0x0f) << 48
 }
@@ -80,8 +82,6 @@ func murmurHash32(data []byte, seed uint32) uint32 {
 
 	return h1
 }
-<<<<<<< HEAD
-=======
 
 func GetReqIDFromCtx(ctx context.Context) (int64, error) {
 	var reqIDValue int64
@@ -96,4 +96,3 @@ func GetReqIDFromCtx(ctx context.Context) (int64, error) {
 	}
 	return 0, nil
 }
->>>>>>> 55121b7952635c76ff8eb1b37b7103aee4e02447
