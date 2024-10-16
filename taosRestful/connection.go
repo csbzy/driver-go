@@ -233,8 +233,8 @@ func (tc *taosConn) taosQuery(ctx context.Context, sql string, bufferSize int) (
 	startTime := timex.Now()
 	var resp *http.Response
 	resp, err = tc.client.Do(req)
-	duration := timex.Since(startTime)
 	defer func() {
+		duration := timex.Since(startTime)
 		if err != nil {
 			logx.WithContext(ctx).WithDuration(duration).Errorf("[SQL] taosRestQuery  query: %s err:%v", sql, err)
 		} else {

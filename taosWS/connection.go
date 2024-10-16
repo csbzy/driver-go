@@ -483,6 +483,7 @@ func (tc *taosConn) stmtUseResult(stmtID uint64) (*rows, error) {
 	}
 	return rs, nil
 }
+
 func (tc *taosConn) Exec(query string, args []driver.Value) (driver.Result, error) {
 	return tc.execCtx(context.Background(), query, common.ValueArgsToNamedValueArgs(args))
 }
@@ -538,6 +539,22 @@ func (tc *taosConn) doQuery(ctx context.Context, query string, args []driver.Nam
 	if tc.isClosed() {
 		return nil, driver.ErrBadConn
 	}
+	startTime := timex.Now()
+	reqID := tc.generateReqID()
+
+	defer func() {
+		duration := timex.Since(startTime)
+		if err != nil {
+			logx.WithContext(ctx).WithDuration(duration).Errorf("[SQL] taosWsQuery reqID:%v query: %s err:%v", reqID, query, err)
+		} else {
+			if duration > time.Second {
+				logx.WithContext(ctx).WithDuration(duration).Slowf("[SQL] taosWsQuery reqID:%v slowcall query: %s", reqID, query)
+			} else {
+				logx.WithContext(ctx).WithDuration(duration).Infof("[SQL] taosWsQuery reqID:%v query: %s", reqID, query)
+			}
+		}
+	}()
+
 	if len(args) != 0 {
 		if !tc.cfg.interpolateParams {
 			return nil, driver.ErrSkip
@@ -549,20 +566,7 @@ func (tc *taosConn) doQuery(ctx context.Context, query string, args []driver.Nam
 		}
 		query = prepared
 	}
-	reqID := tc.generateReqID()
-	startTime := timex.Now()
-	duration := timex.Since(startTime)
-	defer func() {
-		if err != nil {
-			logx.WithContext(ctx).WithDuration(duration).Errorf("[SQL] taosWsQuery reqID:%v query: %s err:%v", reqID, query, err)
-		} else {
-			if duration > time.Second {
-				logx.WithContext(ctx).WithDuration(duration).Slowf("[SQL] taosWsQuery reqID:%v slowcall query: %s", reqID, query)
-			} else {
-				logx.WithContext(ctx).WithDuration(duration).Infof("[SQL] taosWsQuery reqID:%v query: %s", reqID, query)
-			}
-		}
-	}()
+
 	tc.buf.Reset()
 
 	WriteUint64(tc.buf, reqID) // req id
