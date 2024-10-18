@@ -241,7 +241,7 @@ func (tc *taosConn) taosQuery(ctx context.Context, sql string, bufferSize int) (
 			if duration > time.Second {
 				logx.WithContext(ctx).WithDuration(duration).Slowf("[SQL] taosRestQuery  slowcall query: %s", sql)
 			} else {
-				logx.WithContext(ctx).WithDuration(duration).Infof("[SQL] taosRestQuery  query: %s", sql)
+				logx.WithContext(ctx).WithDuration(duration).Debugf("[SQL] taosRestQuery  query: %s", sql)
 			}
 		}
 	}()

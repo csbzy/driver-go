@@ -550,7 +550,7 @@ func (tc *taosConn) doQuery(ctx context.Context, query string, args []driver.Nam
 			if duration > time.Second {
 				logx.WithContext(ctx).WithDuration(duration).Slowf("[SQL] taosWsQuery reqID:%v slowcall query: %s", reqID, query)
 			} else {
-				logx.WithContext(ctx).WithDuration(duration).Infof("[SQL] taosWsQuery reqID:%v query: %s", reqID, query)
+				logx.WithContext(ctx).WithDuration(duration).Debugf("[SQL] taosWsQuery reqID:%v query: %s", reqID, query)
 			}
 		}
 	}()
